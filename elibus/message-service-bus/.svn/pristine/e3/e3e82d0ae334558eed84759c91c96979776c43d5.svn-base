@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elisoft.servicebus.modules.esb.dao.WsDao">
+
+    <sql id="wsColumns">
+        a.id,
+        a.soap_url,
+        a.soap_action,
+        a.req_info,
+        a.resp_info,
+        a.soap_action,
+        a.create_date,
+        a.update_date,
+        a.del_flag
+    </sql>
+
+    <!-- 根据编号 -->
+    <select id="get" resultType="WebService">
+        SELECT
+        <include refid="wsColumns"/>
+        FROM esb_ws a WHERE a.id = #{id}
+    </select>
+
+    <!-- 插入 -->
+    <insert id="insert">
+        INSERT INTO esb_ws(
+        id,
+        soap_url,
+        soap_action,
+        req_info,
+        resp_info,
+        create_date,
+        update_date,
+        del_flag
+        ) VALUES (
+        #{id},
+        #{soapUrl},
+        #{soapAction},
+        #{reqInfo},
+        #{respInfo},
+        #{createDate},
+        #{updateDate},
+        #{delFlag}
+        )
+    </insert>
+
+    <!-- 更新 -->
+    <update id="update">
+        UPDATE esb_ws SET
+        soap_url = #{soapUrl},
+        soap_action = #{soapAction},
+        req_info = #{reqInfo},
+        resp_info = #{respInfo},
+        update_date = #{updateDate}
+        WHERE id = #{id}
+    </update>
+
+    <select id="findList" resultType="WebService">
+        SELECT
+        <include refid="wsColumns"/>
+        FROM esb_ws a
+        WHERE a.del_flag = '0'
+        <if test="soapUrl != null and soapUrl != ''">
+            AND a.soap_url like
+            <if test="dbName == 'mysql'">CONCAT('%', #{soapUrl}, '%')</if>
+        </if>
+        <if test="soapAction != null and soapAction != ''">
+            AND a.soap_action like
+            <if test="dbName == 'mysql'">CONCAT('%', #{soapAction}, '%')</if>
+        </if>
+        ORDER BY a.create_date DESC
+    </select>
+</mapper>

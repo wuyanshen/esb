@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/integration"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ 	xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:stream="http://www.springframework.org/schema/integration/stream"
+	xmlns:ws="http://www.springframework.org/schema/integration/ws"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+			http://www.springframework.org/schema/beans/spring-beans.xsd
+			http://www.springframework.org/schema/integration
+			http://www.springframework.org/schema/integration/spring-integration.xsd
+			http://www.springframework.org/schema/integration/stream
+			http://www.springframework.org/schema/integration/stream/spring-integration-stream.xsd
+			http://www.springframework.org/schema/integration/ws
+			http://www.springframework.org/schema/integration/ws/spring-integration-ws.xsd">
+
+	<int:channel id="wsinputChannel" />
+
+	<ws:outbound-gateway id="marshallingGateway" request-channel="wsinputChannel" reply-channel="output"
+        uri="{reqUrl}">
+        <int:poller fixed-rate="500" />
+        <ws:uri-variable name="reqUrl" expression="headers.soapUrl"/>
+		<ws:request-handler-advice-chain>
+			<ref bean="retryAdvice" />
+		</ws:request-handler-advice-chain>
+	</ws:outbound-gateway>
+
+    <beans:bean id="retryAdvice" class="org.springframework.integration.handler.advice.RequestHandlerRetryAdvice" >
+        <beans:property name="retryTemplate">
+            <beans:bean class="org.springframework.retry.support.RetryTemplate">
+                <beans:property name="backOffPolicy">
+                    <beans:bean class="org.springframework.retry.backoff.FixedBackOffPolicy">
+                        <beans:property name="backOffPeriod" value="4000" />
+                    </beans:bean>
+                </beans:property>
+                <beans:property name="retryPolicy">
+                    <beans:bean class="org.springframework.retry.policy.SimpleRetryPolicy">
+                        <beans:property name="maxAttempts" value="4" />
+                    </beans:bean>
+                </beans:property>
+            </beans:bean>
+        </beans:property>
+    </beans:bean>
+
+	<int:channel id="output">
+		<int:queue capacity="100"/>
+	</int:channel>
+
+    <!-- Service is running - Response received -->
+    <int:channel id="responseChannel" />
+
+    <int:service-activator ref="clientServiceActivator" method="handleServiceResult" input-channel="responseChannel" />
+
+
+    <!-- Log failed invocation -->
+    <int:service-activator ref="clientServiceActivator" method="handleFailedInvocation" input-channel="errorChannel" output-channel="logChannel" />
+    <int:channel id="logChannel" />
+
+</beans:beans>

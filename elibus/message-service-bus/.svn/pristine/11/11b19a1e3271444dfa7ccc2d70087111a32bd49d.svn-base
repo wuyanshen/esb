@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/integration"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ 	xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:stream="http://www.springframework.org/schema/integration/stream"
+	xmlns:ws="http://www.springframework.org/schema/integration/ws"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+			http://www.springframework.org/schema/beans/spring-beans.xsd
+			http://www.springframework.org/schema/integration
+			http://www.springframework.org/schema/integration/spring-integration.xsd
+			http://www.springframework.org/schema/integration/stream
+			http://www.springframework.org/schema/integration/stream/spring-integration-stream.xsd
+			http://www.springframework.org/schema/integration/ws
+			http://www.springframework.org/schema/integration/ws/spring-integration-ws.xsd">
+
+	<int:channel id="gatewayInput" />
+
+	<int:gateway service-interface="com.elisoft.servicebus.core.gateway.EsbSyncGateway" default-request-channel="gatewayInput"
+				 default-reply-timeout="10000" default-request-timeout="10000">
+		<int:method name="wsProcess">
+			<int:header name="REQUEST_TYPE" value="WS"/>
+		</int:method>
+		<int:method name="httpProcess">
+			<int:header name="REQUEST_TYPE" value="HTTP"/>
+		</int:method>
+	</int:gateway>
+
+	<chain input-channel="gatewayInput" output-channel="routingChannel">
+		<!--认证-->
+		<int:filter id="authenticate" discard-channel="authenticateDiscardChannel">
+			<beans:bean id="authenticateFilter" class="com.elisoft.servicebus.core.filter.auth.AuthenticateFilter"/>
+		</int:filter>
+		<!--鉴权-->
+		<int:filter id="authorized" discard-channel="authorizedDiscardChannel">
+			<beans:bean id="authorizedFilter" class="com.elisoft.servicebus.core.filter.auth.AuthorizedFilter"/>
+		</int:filter>
+	</chain>
+
+	<beans:bean id="filterDiscardService" class="com.elisoft.servicebus.core.activator.FilterDiscardService"/>
+
+	<int:channel id="authenticateDiscardChannel" />
+	<int:service-activator input-channel="authenticateDiscardChannel" ref="filterDiscardService" method="authenticateDiscard"/>
+
+	<int:channel id="authorizedDiscardChannel" />
+	<int:service-activator input-channel="authorizedDiscardChannel" ref="filterDiscardService" method="authorizedDiscard"/>
+
+
+	<int:publish-subscribe-channel id="routingChannel"/>
+
+	<int:header-value-router input-channel="routingChannel" header-name="REQUEST_TYPE">
+		<int:mapping value="WS" channel="wsProcessChannel"/>
+		<int:mapping value="HTTP" channel="httpProcessChannel"/>
+	</int:header-value-router>
+
+	<int:channel id="wsProcessChannel" />
+	<int:channel id="httpProcessChannel" />
+
+
+	<!--全局通道拦截器-->
+	<!--<int:channel-interceptor ref="logInterceptor" pattern="*" order="2"/>-->
+	<!--<beans:bean id="logInterceptor" class="com.elisoft.servicebus.core.interceptor.EsbLogInterceptorAdapterAdapter"/>-->
+	<!--<int:channel-interceptor ref="logInterceptor" pattern="input*, bar*, foo, !baz*" order="3">-->
+		<!--<beans:bean class="com.elisoft.servicebus.core.interceptor.EsbLogInterceptorAdapterAdapter"/>-->
+	<!--</int:channel-interceptor>-->
+
+	<!--全局监控和记录日志-->
+	<!--<int:wire-tap pattern="*" order="1" channel="wiretapChannel"/>-->
+	<!--<int:channel id="wiretapChannel"/>-->
+	<!--<int:logging-channel-adapter channel="wiretapChannel" level="DEBUG"/>-->
+
+
+</beans:beans>

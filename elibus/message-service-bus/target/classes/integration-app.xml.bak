@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/integration"
+             xmlns:int="http://www.springframework.org/schema/integration"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:stream="http://www.springframework.org/schema/integration/stream"
+             xmlns:ws="http://www.springframework.org/schema/integration/ws"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans
+			http://www.springframework.org/schema/beans/spring-beans.xsd
+			http://www.springframework.org/schema/integration
+			http://www.springframework.org/schema/integration/spring-integration.xsd
+			http://www.springframework.org/schema/integration/stream
+			http://www.springframework.org/schema/integration/stream/spring-integration-stream.xsd
+			http://www.springframework.org/schema/integration/ws
+			http://www.springframework.org/schema/integration/ws/spring-integration-ws.xsd">
+
+    <!--对该integration的基本声明，包括接收地址、接收方式、接收channel、返回channel等-->
+    <bean class="org.springframework.integration.http.inbound.UriPathHandlerMapping" />
+    <int-http:inbound-gateway path="/receiveAppGateway" reply-channel="responseChannel"
+                              request-channel="receiveChannel" supported-methods="GET, POST" header-mapper="headerMapper" error-channel="systemErrorChannel">
+    </int-http:inbound-gateway>
+    <bean id="headerMapper" class="org.springframework.integration.http.support.DefaultHttpHeaderMapper">
+        <property name="inboundHeaderNames" value="*" />
+        <property name="outboundHeaderNames" value="Content-Type" />
+    </bean>
+
+    <!--返回channel-->
+    <int:channel id="responseChannel" />
+    <!--接收channel-->
+    <int:channel id="receiveChannel" />
+    <!--数据绑定-->
+    <int:service-activator method="binding" ref="appDataBindingService" input-channel="receiveChannel"
+                           output-channel="beforeSendChannel" />
+    <!--发送ESB前业务逻辑处理-->
+    <int:channel id="beforeSendChannel" />
+    <int:service-activator ref="txnDispatchService" method="beforeSend" input-channel="beforeSendChannel"
+                           output-channel="routingChannel" />
+
+    <!-- ESB路由，分为发送和不发送-->
+    <int:channel id="routingChannel" />
+    <int:router input-channel="routingChannel" ref="channelRouter" />
+    <!-- normal esb -->
+    <int:channel id="esb" />
+    <!-- doNothing -->
+    <int:channel id="non" />
+    <!--对于发送esb数据的处理-->
+    <int:chain input-channel="esb" output-channel="esbResponseActionCannel">
+        <!-- append send esb data -->
+        <int:service-activator ref="esbDataBindingService" />
+        <!-- 把交易代碼改為 ESB 交易代碼 -->
+        <int:header-enricher default-overwrite="true" ref="esbHeaderEnricher" method="transferTxCode" />
+        <!-- JSON to ESB request XML -->
+        <int:transformer method="json2xml" ref="esbTransformer" />
+        <!-- ESB adapter -->
+        <int:gateway request-channel="esbRoutingChannel" />
+        <!-- ESB response XML to JSON -->
+        <int:transformer method="xml2json" ref="esbTransformer" />
+    </int:chain>
+
+    <!-- 判斷是否需要重送(3次) 是:esbSendRetryChannel 否:esbSendChannel -->
+    <int:channel id="esbRoutingChannel" />
+    <int:router input-channel="esbRoutingChannel" ref="esbSendRouter" />
+
+    <!-- 收到 esb response 後要加工的部分 -->
+    <int:channel id="afterSendChannel" />
+    <int:service-activator ref="txnDispatchService" method="afterSend" input-channel="afterSendChannel"
+                           output-channel="dealTransLogChannel" />
+    <!-- deal TransLog -->
+    <int:channel id="dealTransLogChannel" />
+    <int:service-activator ref="appTransLogEndPoint" input-channel="dealTransLogChannel" output-channel="responseRoutingChannel" />
+    <!-- 回傳動作 判斷是否有連續交易 有:init 無:responseEncryptChannel -->
+    <int:channel id="responseRoutingChannel" />
+    <int:router input-channel="responseRoutingChannel" ref="appResponseRouter" />
+
+    <!--异常处理-->
+    <int:channel id="systemErrorChannel" />
+    <int:chain input-channel="systemErrorChannel" output-channel="responseChannel">
+        <!-- 系統錯誤處理 -->
+        <int:service-activator ref="errorHandleService" />
+        <!-- 更新EJ -->
+        <int:service-activator ref="appTransLogEndPoint" />
+        <!-- 輸出轉換 -->
+        <int:transformer ref="systemErrorformer" />
+        <!-- 修改charet  -->
+        <int:header-enricher default-overwrite="true" ref="esbHeaderEnricher" method="fixCharset" />
+    </int:chain>
+
+
+</beans:beans>

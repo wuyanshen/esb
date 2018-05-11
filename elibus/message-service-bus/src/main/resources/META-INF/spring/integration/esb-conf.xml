@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/integration"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ 	xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:stream="http://www.springframework.org/schema/integration/stream"
+	xmlns:ws="http://www.springframework.org/schema/integration/ws"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+			http://www.springframework.org/schema/beans/spring-beans.xsd
+			http://www.springframework.org/schema/integration
+			http://www.springframework.org/schema/integration/spring-integration.xsd
+			http://www.springframework.org/schema/integration/stream
+			http://www.springframework.org/schema/integration/stream/spring-integration-stream.xsd
+			http://www.springframework.org/schema/integration/ws
+			http://www.springframework.org/schema/integration/ws/spring-integration-ws.xsd">
+
+	<!--<int:annotation-config/>-->
+	<!--<context:component-scan base-package="com.elisoft.servicebus.core"/>-->
+
+	<int:channel id="gateInput" />
+	<int:channel id="gateResp" />
+	<int:channel id="wsRespOutput">
+		<int:queue capacity="100"/>
+	</int:channel>
+
+	<!--<ws:outbound-gateway request-channel="gateInput" reply-channel="wsRespOutput" uri="{reqUrl}">-->
+		<!--<ws:uri-variable name="reqUrl" expression="headers.soapUrl"/>-->
+	<!--</ws:outbound-gateway>-->
+
+	<chain input-channel="gateInput" output-channel="wsRespOutput">
+		<ws:outbound-gateway uri="{reqUrl}">
+			<ws:uri-variable name="reqUrl" expression="headers.soapUrl"/>
+		</ws:outbound-gateway>
+	</chain>
+
+	<!--全局通道拦截器-->
+	<!--<int:channel-interceptor ref="logInterceptor" pattern="*" order="2"/>-->
+	<!--<beans:bean id="logInterceptor" class="com.elisoft.servicebus.core.interceptor.EsbLogInterceptorAdapterAdapter"/>-->
+	<!--<int:channel-interceptor ref="logInterceptor" pattern="input*, bar*, foo, !baz*" order="3">-->
+		<!--<beans:bean class="com.elisoft.servicebus.core.interceptor.EsbLogInterceptorAdapterAdapter"/>-->
+	<!--</int:channel-interceptor>-->
+
+	<!--全局监控和记录日志-->
+	<!--<int:wire-tap pattern="*" order="1" channel="wiretapChannel"/>-->
+	<!--<int:channel id="wiretapChannel"/>-->
+	<!--<int:logging-channel-adapter channel="wiretapChannel" level="DEBUG"/>-->
+
+
+</beans:beans>

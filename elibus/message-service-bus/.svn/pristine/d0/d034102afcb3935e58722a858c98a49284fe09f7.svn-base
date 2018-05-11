@@ -1,0 +1,39 @@
+package com.elisoft.servicebus.modules.esb.service;
+
+import com.elisoft.servicebus.modules.esb.dao.WsDao;
+import com.elisoft.servicebus.modules.esb.entity.WebService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+/**
+ * @author JiJie.LianG
+ * @date 2018-05-09 下午5:20
+ */
+@Service
+@Transactional(readOnly = true)
+public class EsbWsService {
+
+    @Autowired
+    private WsDao wsDao;
+
+    public List<WebService> findUser(WebService ws){
+        return wsDao.findList(ws);
+    }
+
+    @Transactional(readOnly = false)
+    public void saveWs(WebService ws) {
+        wsDao.insert(ws);
+    }
+
+    @Transactional(readOnly = false)
+    public void updateWs(WebService ws) {
+        wsDao.update(ws);
+    }
+
+    public WebService get(String id) {
+        return wsDao.get(id);
+    }
+}

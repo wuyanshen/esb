@@ -1,0 +1,409 @@
+<xs:schema xmlns:tns="http://webservice.elisoft.com/" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="unqualified" targetNamespace="http://webservice.elisoft.com/" version="1.0" >
+    <xs:element name="ChangeAssetsEnsureED" type="tns:ChangeAssetsEnsureED"/>
+    <xs:element name="ChangeAssetsEnsureEDResponse" type="tns:ChangeAssetsEnsureEDResponse"/>
+    <xs:element name="changeAssetsED" type="tns:changeAssetsED"/>
+    <xs:element name="changeAssetsEDResponse" type="tns:changeAssetsEDResponse"/>
+    <xs:element name="doOpenAssetED" type="tns:doOpenAssetED"/>
+    <xs:element name="doOpenAssetEDResponse" type="tns:doOpenAssetEDResponse"/>
+    <xs:element name="doOpenAssetEnsureED" type="tns:doOpenAssetEnsureED"/>
+    <xs:element name="doOpenAssetEnsureEDResponse" type="tns:doOpenAssetEnsureEDResponse"/>
+    <xs:element name="doOpenPackage" type="tns:doOpenPackage"/>
+    <xs:element name="doOpenPackageResponse" type="tns:doOpenPackageResponse"/>
+    <xs:element name="etuoGetBalance" type="tns:etuoGetBalance"/>
+    <xs:element name="etuoGetBalanceResponse" type="tns:etuoGetBalanceResponse"/>
+    <xs:element name="etuoGetProducts" type="tns:etuoGetProducts"/>
+    <xs:element name="etuoGetProductsResponse" type="tns:etuoGetProductsResponse"/>
+    <xs:element name="etuoPushData" type="tns:etuoPushData"/>
+    <xs:element name="etuoPushDataResponse" type="tns:etuoPushDataResponse"/>
+    <xs:element name="etuoQueryReport" type="tns:etuoQueryReport"/>
+    <xs:element name="etuoQueryReportResponse" type="tns:etuoQueryReportResponse"/>
+    <xs:element name="etuoSendOrder" type="tns:etuoSendOrder"/>
+    <xs:element name="etuoSendOrderResponse" type="tns:etuoSendOrderResponse"/>
+    <xs:element name="etuoSetPassword" type="tns:etuoSetPassword"/>
+    <xs:element name="etuoSetPasswordResponse" type="tns:etuoSetPasswordResponse"/>
+    <xs:element name="getOpResultDetailForPackage" type="tns:getOpResultDetailForPackage"/>
+    <xs:element name="getOpResultDetailForPackageResponse" type="tns:getOpResultDetailForPackageResponse"/>
+    <xs:element name="getOpResultForPackage" type="tns:getOpResultForPackage"/>
+    <xs:element name="getOpResultForPackageResponse" type="tns:getOpResultForPackageResponse"/>
+    <xs:element name="getResourceForPackage" type="tns:getResourceForPackage"/>
+    <xs:element name="getResourceForPackageResponse" type="tns:getResourceForPackageResponse"/>
+    <xs:element name="getResourceStatusForPackage" type="tns:getResourceStatusForPackage"/>
+    <xs:element name="getResourceStatusForPackageResponse" type="tns:getResourceStatusForPackageResponse"/>
+    <xs:element name="haodangCreateOrder" type="tns:haodangCreateOrder"/>
+    <xs:element name="haodangCreateOrderResponse" type="tns:haodangCreateOrderResponse"/>
+    <xs:element name="haodangPushData" type="tns:haodangPushData"/>
+    <xs:element name="haodangPushDataResponse" type="tns:haodangPushDataResponse"/>
+    <xs:element name="haodangQueryOrder" type="tns:haodangQueryOrder"/>
+    <xs:element name="haodangQueryOrderResponse" type="tns:haodangQueryOrderResponse"/>
+    <xs:element name="xmlResponseCommonHeadPackage" type="tns:xmlResponseCommonHeadPackage"/>
+    <xs:element name="xmlResponseCommonHeadPackageResponse" type="tns:xmlResponseCommonHeadPackageResponse"/>
+    <xs:complexType name="changeAssetsED">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="areanum" type="xs:string"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="phoneInfoList" type="tns:phoneInfo"/>
+
+        </xs:sequence>
+
+    </xs:complexType>
+    <xs:complexType name="phoneInfo">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="effRule" type="xs:string"/>
+            <xs:element minOccurs="0" name="mobNum" type="xs:string"/>
+            <xs:element minOccurs="0" name="oprCode" type="xs:string"/>
+            <xs:element minOccurs="0" name="userPackage" type="xs:string"/>
+            <xs:element minOccurs="0" name="validMonths" type="xs:string"/>
+
+        </xs:sequence>
+
+    </xs:complexType>
+    <xs:complexType name="changeAssetsEDResponse">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="return" type="xs:string"/>
+
+        </xs:sequence>
+
+    </xs:complexType>
+    <xs:complexType name="haodangCreateOrder">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="areanum" type="xs:string"/>
+            <xs:element minOccurs="0" name="phonesStr" type="xs:string"/>
+            <xs:element minOccurs="0" name="prdCode" type="xs:string"/>
+            <xs:element minOccurs="0" name="bizDownOrderId" type="xs:string"/>
+            <xs:element minOccurs="0" name="epid" type="xs:string"/>
+
+        </xs:sequence>
+
+    </xs:complexType>
+    <xs:complexType name="haodangCreateOrderResponse">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="return" type="xs:string"/>
+
+        </xs:sequence>
+
+    </xs:complexType>
+    <xs:complexType name="etuoGetProducts">
+        <xs:sequence/>
+
+    </xs:complexType>
+    <xs:complexType name="etuoGetProductsResponse">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="return" type="xs:string"/>
+
+        </xs:sequence>
+
+    </xs:complexType>
+    <xs:complexType name="getResourceStatusForPackage">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="areanum" type="xs:string"/>
+            <xs:element minOccurs="0" name="currentPage" type="xs:string"/>
+            <xs:element minOccurs="0" name="pageNum" type="xs:string"/>
+
+        </xs:sequence>
+
+    </xs:complexType>
+    <xs:complexType name="getResourceStatusForPackageResponse">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="return" type="xs:string"/>
+
+        </xs:sequence>
+
+    </xs:complexType>
+    <xs:complexType name="getOpResultDetailForPackage">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="areanum" type="xs:string"/>
+            <xs:element minOccurs="0" name="phoneNumber" type="xs:string"/>
+            <xs:element minOccurs="0" name="state" type="xs:string"/>
+            <xs:element minOccurs="0" name="opordernum" type="xs:string"/>
+            <xs:element minOccurs="0" name="currentPage" type="xs:string"/>
+            <xs:element minOccurs="0" name="pageNum" type="xs:string"/>
+
+        </xs:sequence>
+
+    </xs:complexType>
+    <xs:complexType name="getOpResultDetailForPackageResponse">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="return" type="xs:string"/>
+
+        </xs:sequence>
+
+    </xs:complexType>
+    <xs:complexType name="haodangPushData">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+            <xs:element minOccurs="0" name="arg1" type="xs:string"/>
+            <xs:element minOccurs="0" name="arg2" type="xs:string"/>
+            <xs:element minOccurs="0" name="arg3" type="xs:string"/>
+
+        </xs:sequence>
+
+    </xs:complexType>
+    <xs:complexType name="haodangPushDataResponse">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="return" type="xs:string"/>
+
+        </xs:sequence>
+
+    </xs:complexType>
+    <xs:complexType name="haodangQueryOrder">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="orderId" type="xs:string"/>
+            <xs:element minOccurs="0" name="epid" type="xs:string"/>
+
+        </xs:sequence>
+
+    </xs:complexType>
+    <xs:complexType name="haodangQueryOrderResponse">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="return" type="xs:string"/>
+
+        </xs:sequence>
+
+    </xs:complexType>
+    <xs:complexType name="etuoGetBalance">
+        <xs:sequence/>
+
+    </xs:complexType>
+    <xs:complexType name="etuoGetBalanceResponse">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="return" type="xs:string"/>
+
+        </xs:sequence>
+
+    </xs:complexType>
+    <xs:complexType name="doOpenAssetED">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="areanum" type="xs:string"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="phonesList" type="xs:string"/>
+            <xs:element minOccurs="0" name="prdCode" type="xs:string"/>
+
+        </xs:sequence>
+
+    </xs:complexType>
+    <xs:complexType name="doOpenAssetEDResponse">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="return" type="xs:string"/>
+
+        </xs:sequence>
+
+    </xs:complexType>
+    <xs:complexType name="doOpenAssetEnsureED">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="areanum" type="xs:string"/>
+            <xs:element minOccurs="0" name="operSeq" type="xs:string"/>
+            <xs:element minOccurs="0" name="succNum" type="xs:string"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="SuccTelList" type="xs:string"/>
+            <xs:element minOccurs="0" name="failNum" type="xs:string"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="failInfoList" type="tns:failInfo"/>
+
+        </xs:sequence>
+
+    </xs:complexType>
+    <xs:complexType name="failInfo">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="mobNum" type="xs:string"/>
+            <xs:element minOccurs="0" name="rsp" type="xs:string"/>
+            <xs:element minOccurs="0" name="rspDesc" type="xs:string"/>
+
+        </xs:sequence>
+
+    </xs:complexType>
+    <xs:complexType name="doOpenAssetEnsureEDResponse">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="return" type="xs:string"/>
+
+        </xs:sequence>
+
+    </xs:complexType>
+    <xs:complexType name="etuoSendOrder">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="proCode" type="xs:string"/>
+            <xs:element minOccurs="0" name="sendSim" type="xs:string"/>
+            <xs:element minOccurs="0" name="outTradeNo" type="xs:string"/>
+            <xs:element minOccurs="0" name="areanum" type="xs:string"/>
+            <xs:element minOccurs="0" name="epid" type="xs:string"/>
+
+        </xs:sequence>
+
+    </xs:complexType>
+    <xs:complexType name="etuoSendOrderResponse">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="return" type="xs:string"/>
+
+        </xs:sequence>
+
+    </xs:complexType>
+    <xs:complexType name="etuoSetPassword">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="newPassword" type="xs:string"/>
+
+        </xs:sequence>
+
+    </xs:complexType>
+    <xs:complexType name="etuoSetPasswordResponse">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="return" type="xs:string"/>
+
+        </xs:sequence>
+
+    </xs:complexType>
+    <xs:complexType name="etuoPushData">
+        <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="arg0" type="tns:etuoPushBean"/>
+
+        </xs:sequence>
+
+    </xs:complexType>
+    <xs:complexType name="etuoPushBean">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="desc" type="xs:string"/>
+            <xs:element minOccurs="0" name="outTradeNo" type="xs:string"/>
+            <xs:element minOccurs="0" name="phone" type="xs:string"/>
+            <xs:element minOccurs="0" name="status" type="xs:string"/>
+            <xs:element minOccurs="0" name="transIDO" type="xs:string"/>
+
+        </xs:sequence>
+
+    </xs:complexType>
+    <xs:complexType name="etuoPushDataResponse">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="return" type="xs:string"/>
+
+        </xs:sequence>
+
+    </xs:complexType>
+    <xs:complexType name="doOpenPackage">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="areanum" type="xs:string"/>
+            <xs:element minOccurs="0" name="phonesStr" type="xs:string"/>
+            <xs:element minOccurs="0" name="prdCode" type="xs:string"/>
+            <xs:element minOccurs="0" name="bizDownOrderId" type="xs:string"/>
+            <xs:element minOccurs="0" name="epid" type="xs:string"/>
+
+        </xs:sequence>
+
+    </xs:complexType>
+    <xs:complexType name="doOpenPackageResponse">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="return" type="xs:string"/>
+
+        </xs:sequence>
+
+    </xs:complexType>
+    <xs:complexType name="getOpResultForPackage">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="areanum" type="xs:string"/>
+            <xs:element minOccurs="0" name="currentPage" type="xs:string"/>
+            <xs:element minOccurs="0" name="pageNum" type="xs:string"/>
+
+        </xs:sequence>
+
+    </xs:complexType>
+    <xs:complexType name="getOpResultForPackageResponse">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="return" type="xs:string"/>
+
+        </xs:sequence>
+
+    </xs:complexType>
+    <xs:complexType name="etuoQueryReport">
+        <xs:sequence/>
+
+    </xs:complexType>
+    <xs:complexType name="etuoQueryReportResponse">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="return" type="xs:string"/>
+
+        </xs:sequence>
+
+    </xs:complexType>
+    <xs:complexType name="ChangeAssetsEnsureED">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="areanum" type="xs:string"/>
+            <xs:element minOccurs="0" name="operSeq" type="xs:string"/>
+            <xs:element minOccurs="0" name="succNum" type="xs:string"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="succInfoList" type="tns:succInfo"/>
+            <xs:element minOccurs="0" name="failNum" type="xs:string"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="failInfoList" type="tns:failInfo"/>
+
+        </xs:sequence>
+
+    </xs:complexType>
+    <xs:complexType name="succInfo">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="effDate" type="xs:string"/>
+            <xs:element minOccurs="0" name="succTel" type="xs:string"/>
+
+        </xs:sequence>
+
+    </xs:complexType>
+    <xs:complexType name="ChangeAssetsEnsureEDResponse">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="return" type="xs:string"/>
+
+        </xs:sequence>
+
+    </xs:complexType>
+    <xs:complexType name="getResourceForPackage">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="areanum" type="xs:string"/>
+            <xs:element minOccurs="0" name="currentPage" type="xs:string"/>
+            <xs:element minOccurs="0" name="pageNum" type="xs:string"/>
+
+        </xs:sequence>
+
+    </xs:complexType>
+    <xs:complexType name="getResourceForPackageResponse">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="return" type="xs:string"/>
+
+        </xs:sequence>
+
+    </xs:complexType>
+    <xs:complexType name="xmlResponseCommonHeadPackage">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+
+        </xs:sequence>
+
+    </xs:complexType>
+    <xs:complexType name="xmlResponseCommonHeadPackageResponse">
+        <xs:sequence>
+            <xs:element name="_return">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" name="entry">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element minOccurs="0" name="key" type="xs:string"/>
+                                    <xs:element minOccurs="0" name="value" type="xs:anyType"/>
+
+                                </xs:sequence>
+
+                            </xs:complexType>
+
+                        </xs:element>
+
+                    </xs:sequence>
+
+                </xs:complexType>
+
+            </xs:element>
+
+        </xs:sequence>
+
+    </xs:complexType>
+    <xs:complexType name="hashMap">
+        <xs:complexContent>
+            <xs:extension base="tns:abstractMap">
+                <xs:sequence/>
+
+            </xs:extension>
+
+        </xs:complexContent>
+
+    </xs:complexType>
+    <xs:complexType abstract="true" name="abstractMap">
+        <xs:sequence/>
+
+    </xs:complexType>
+</xs:schema>
